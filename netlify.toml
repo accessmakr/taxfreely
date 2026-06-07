@@ -1,0 +1,94 @@
+# ── Build configuration ───────────────────────────────────────────────────────
+[build]
+  command   = "npm run build:full"
+  publish   = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION  = "10"
+
+# ── Redirects ────────────────────────────────────────────────────────────────
+# Order matters — Netlify processes rules top to bottom.
+# If a static file exists at the requested path it is served directly,
+# bypassing all redirect rules regardless of order.
+
+# 1. API routes → Netlify Functions proxy
+#    force = true ensures this fires even if a matching file existed (it won't)
+[[redirects]]
+  from  = "/api/*"
+  to    = "/.netlify/functions/:splat"
+  status = 200
+  force  = true
+
+# 2. SPA catch-all — serves index.html for every route that has no static file
+#    Guide pages at /guides/[country]/index.html are static files and
+#    are served directly before this rule is evaluated
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# ── Headers ──────────────────────────────────────────────────────────────────
+
+# Security headers on all responses
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options           = "DENY"
+    X-XSS-Protection          = "1; mode=block"
+    X-Content-Type-Options    = "nosniff"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "camera=(self), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+# Immutable cache for Vite-hashed assets (filenames contain content hash)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Long cache for icons (manually versioned when changed)
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Never cache the service worker — browser must always revalidate
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma        = "no-cache"
+
+# Never cache the web manifest — changes must propagate immediately
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "no-cache, max-age=0"
+
+# Guide pages — cache for 1 day, allow revalidation
+[[headers]]
+  for = "/guides/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=3600"
+
+# ── Netlify Functions ─────────────────────────────────────────────────────────
+[functions]
+  node_bundler = "esbuild"
+
+# Extended timeout for AI provider calls (Groq + Gemini can take up to 15s
+# for complex queries; 26s gives headroom while staying under Netlify's limit)
+[functions."ai-query"]
+  timeout = 26
+
+[functions."ai-deductions"]
+  timeout = 26
+
+[functions."ai-news"]
+  timeout = 26
+
+# Receipt scan calls Gemini Vision — image processing adds latency
+# Client compresses images to under 1.5 MB before sending
+[functions."receipt-scan"]
+  timeout = 26
