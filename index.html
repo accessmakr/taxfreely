@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!--
+    IMPORTANT — before going live, replace every instance of:
+    https://taxfreely.netlify.app
+    with your actual live URL (custom domain or Netlify subdomain).
+
+    Also replace:
+    ca-pub-REPLACE_WITH_YOUR_PUBLISHER_ID
+    with your real Google AdSense publisher ID from adsense.google.com
+  -->
+
+  <!-- ── Primary SEO ───────────────────────────────────────────────────── -->
+  <title>Free Freelance Tax Calculator — 195 Countries | TaxFreely</title>
+
+  <meta
+    name="description"
+    content="Calculate your freelance take-home pay in any of 195 countries. Income tax, self-employment rates, VAT thresholds, quarterly estimates, and AI tax advice. Free, offline, no account needed."
+  />
+
+  <meta
+    name="keywords"
+    content="freelance tax calculator, self employed tax calculator, independent contractor tax, quarterly tax calculator, VAT calculator freelancer, tax calculator 195 countries, digital nomad tax, remote worker tax, self employment tax, take-home pay calculator"
+  />
+
+  <meta name="author" content="TaxFreely" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#F4F4F5" media="(prefers-color-scheme: light)" />
+  <meta name="msapplication-TileColor" content="#000000" />
+
+  <!-- Canonical URL — update to your live domain before launch -->
+  <link rel="canonical" href="https://taxfreely.netlify.app" />
+
+  <!-- Alternate language URLs (hreflang) — the React app handles this
+       dynamically but we declare English as the default here -->
+  <link rel="alternate" hreflang="x-default" href="https://taxfreely.netlify.app" />
+  <link rel="alternate" hreflang="en" href="https://taxfreely.netlify.app" />
+
+  <!-- ── Open Graph (Facebook, WhatsApp, LinkedIn) ─────────────────────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="TaxFreely" />
+  <meta property="og:url"         content="https://taxfreely.netlify.app" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:title"       content="Free Freelance Tax Calculator — 195 Countries | TaxFreely" />
+  <meta
+    property="og:description"
+    content="Calculate your freelance take-home pay in any of 195 countries. Income tax, self-employment rates, VAT thresholds, AI tax advice. Free, offline, no account."
+  />
+  <!--
+    og:image should be 1200×630 pixels.
+    Create this in Canva (black background, TaxFreely logo, tagline)
+    and upload it to your public/ folder.
+  -->
+  <meta property="og:image"       content="https://taxfreely.netlify.app/og-image.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"    content="TaxFreely — global freelance tax calculator" />
+
+  <!-- ── Twitter / X Card ──────────────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:site"        content="@taxfreely" />
+  <meta name="twitter:creator"     content="@taxfreely" />
+  <meta name="twitter:title"       content="Free Freelance Tax Calculator — 195 Countries" />
+  <meta
+    name="twitter:description"
+    content="Tax estimation for freelancers in 195 countries. Works offline. 40 languages. Free."
+  />
+  <meta name="twitter:image"       content="https://taxfreely.netlify.app/og-image.png" />
+  <meta name="twitter:image:alt"   content="TaxFreely — global freelance tax calculator" />
+
+  <!-- ── PWA + Icons ───────────────────────────────────────────────────── -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <link rel="icon"       type="image/x-icon"  href="/favicon.ico" />
+  <link rel="icon"       type="image/png" sizes="16x16"  href="/icons/icon-16x16.png" />
+  <link rel="icon"       type="image/png" sizes="32x32"  href="/icons/icon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
+
+  <!-- iOS PWA behaviour -->
+  <meta name="apple-mobile-web-app-capable"          content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title"            content="TaxFreely" />
+
+  <!-- ── Performance hints ─────────────────────────────────────────────── -->
+  <!-- Pre-connect to domains the app contacts on load -->
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
+  <!-- Add your Supabase URL here once you have it:
+  <link rel="preconnect" href="https://YOUR_PROJECT.supabase.co" />
+  -->
+
+  <!-- ── Google AdSense ────────────────────────────────────────────────── -->
+  <!--
+    Replace ca-pub-REPLACE_WITH_YOUR_PUBLISHER_ID with your real Publisher ID.
+    You get this from adsense.google.com after your account is approved.
+    Format: ca-pub-1234567890123456
+  -->
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-REPLACE_WITH_YOUR_PUBLISHER_ID"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- ── Structured data — WebApplication ─────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TaxFreely",
+    "url": "https://taxfreely.netlify.app",
+    "description": "Free freelance tax calculator for 195 countries. Works offline. 40 languages. AI-powered tax advice.",
+    "applicationCategory": "FinanceApplication",
+    "applicationSubCategory": "Tax Calculator",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Works offline after first load.",
+    "inLanguage": [
+      "en","es","fr","ar","pt","zh","hi","ru","id","de","ja","ko","it","nl",
+      "tr","vi","th","pl","uk","ro","cs","hu","sv","no","da","fi","el","he",
+      "bn","ur","sw","ha","yo","fa","ms","tl","am","sr","bg"
+    ],
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "featureList": [
+      "Income tax calculation for 195 countries using official progressive brackets",
+      "Self-employment and freelancer-specific social security rates",
+      "VAT and GST registration threshold alerts",
+      "Quarterly estimated tax with country-specific due dates",
+      "AI Tax Assistant for plain-language tax guidance",
+      "Receipt scanner with automatic deduction categorisation",
+      "McKinsey-grade PDF export",
+      "Invoice calculator with VAT",
+      "Deductions module with 9 categories",
+      "Multi-currency income from up to 5 sources",
+      "Works completely offline after first load",
+      "Available in 40 languages with RTL support",
+      "Custom tax rate input for modelling scenarios",
+      "Country comparison for relocation planning"
+    ],
+    "screenshot": [
+      {
+        "@type": "ImageObject",
+        "url": "https://taxfreely.netlify.app/screenshots/screen1.png",
+        "caption": "Tax results screen showing effective rate and take-home pay"
+      }
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "TaxFreely",
+      "url": "https://taxfreely.netlify.app"
+    },
+    "datePublished": "2025-01-01",
+    "isAccessibleForFree": true,
+    "accessibilityFeature": [
+      "highContrast",
+      "largePrint",
+      "readingOrder",
+      "structuralNavigation",
+      "alternativeText"
+    ]
+  }
+  </script>
+
+  <!-- ── Structured data — FAQPage ─────────────────────────────────────── -->
+  <!--
+    FAQPage schema triggers "People Also Ask" rich results in Google.
+    These are the 5 most commonly searched questions about freelance tax tools.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is TaxFreely free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. TaxFreely is free for all core tax calculations across all 195 countries. No account, no login, and no subscription is required. Optional Pro features are available as a one-time purchase."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does TaxFreely work offline?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. TaxFreely works completely offline after the first load. All calculations run locally on your device. Your income data and results never leave your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which countries does TaxFreely support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TaxFreely supports all 195 UN-recognised countries with complete income tax bracket data, self-employment social security rates, VAT or GST thresholds, and quarterly tax due dates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is TaxFreely only for freelancers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. TaxFreely calculates tax for freelancers, employees, contractors, and business owners. You select your employment type and the correct rates are applied automatically."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What languages is TaxFreely available in?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TaxFreely is available in 40 languages: English, Spanish, French, Arabic, Hindi, Portuguese, Chinese (Simplified and Traditional), Russian, Indonesian, German, Japanese, Korean, Italian, Dutch, Turkish, Vietnamese, Thai, Polish, Ukrainian, Romanian, Czech, Hungarian, Swedish, Norwegian, Danish, Finnish, Greek, Hebrew, Bengali, Urdu, Swahili, Hausa, Yoruba, Persian, Malay, Filipino, Amharic, Serbian, and Bulgarian. Right-to-left layout is applied automatically for Arabic, Hebrew, Persian, and Urdu."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── Structured data — SoftwareApplication (Play Store) ───────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TaxFreely",
+    "operatingSystem": "Android",
+    "applicationCategory": "FinanceApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- ── React application root ────────────────────────────────────────── -->
+  <!--
+    The React app mounts here.
+    On the web version, App.jsx renders the full site shell
+    (SiteHeader, ToolCore, ContentSections, LegalFooter).
+    On the mobile Capacitor build, App.jsx renders the native app shell
+    (AppHeader, ToolCore, BottomTabBar).
+
+    Both versions remove the #seo-content section below via main.jsx
+    after mounting — see the comment on that section.
+  -->
+  <div id="root"></div>
+
+  <!-- ── Static SEO content — readable by all crawlers without JavaScript ─
+    This section provides H1/H2/H3 structure that Google, Bing, and
+    DuckDuckGo read from the raw HTML before executing any JavaScript.
+
+    After React mounts, main.jsx removes this element from the DOM.
+    - Web version: ContentSections.jsx renders the same content inside React.
+    - Native app: isNative = true, section removed immediately.
+
+    Do NOT remove this section from the HTML. It is the primary SEO signal
+    for the website's homepage ranking.
+  ─────────────────────────────────────────────────────────────────────── -->
+  <section
+    id="seo-content"
+    aria-hidden="true"
+    style="
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #09090b;
+      line-height: 1.7;
+    "
+  >
+    <h1 style="font-size: 2rem; font-weight: 600; margin-bottom: 0.75rem; color: #09090b;">
+      Free Freelance Tax Calculator — 195 Countries
+    </h1>
+
+    <p style="font-size: 1.0625rem; color: #52525b; margin-bottom: 2rem; max-width: 720px;">
+      TaxFreely calculates your real take-home pay as a freelancer, independent contractor,
+      employee, or business owner — using the official income tax brackets, self-employment
+      rates, and VAT thresholds for all 195 countries on Earth. No account. No subscription.
+      Works completely offline.
+    </p>
+
+    <!-- ── Employment types ─────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Calculate Tax For Every Type of Worker
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      TaxFreely is not limited to freelancers. Select your employment type —
+      freelancer or self-employed, employee or salaried, business owner, or contractor —
+      and the calculator applies the correct social security rate and deduction rules for that
+      status in your selected country. Self-employment tax rates differ significantly from
+      employee rates in most countries, and TaxFreely shows both so you always know which
+      applies to your situation.
+    </p>
+
+    <!-- ── Country coverage ─────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Tax Data for All 195 Countries
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      Every UN-recognised country and territory is supported with complete, current tax data:
+    </p>
+    <ul style="color: #52525b; padding-left: 1.5rem; max-width: 720px; margin-bottom: 1rem;">
+      <li>Income tax brackets with the exact rate for each band</li>
+      <li>Standard personal allowance and exemption thresholds</li>
+      <li>Social security contribution rates — employee and self-employed rates shown separately</li>
+      <li>Self-employment tax where it applies separately from income tax</li>
+      <li>VAT or GST standard rate and the registration threshold</li>
+      <li>Tax year start and end dates</li>
+      <li>Quarterly estimated tax due dates</li>
+      <li>Link to the official tax authority website for each country</li>
+    </ul>
+
+    <!-- ── How tax is calculated ────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.75rem; color: #09090b;">
+      How TaxFreely Calculates Your Tax
+    </h2>
+
+    <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: #18181b;">
+      Progressive Bracket Calculation
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      Income tax is progressive — the more you earn, the higher the rate on each additional
+      pound, dollar, or euro. TaxFreely applies each bracket's rate only to the income that
+      falls within it, exactly as the tax authority does. The results screen shows every
+      bracket that applies to your income, the amount taxed in each band, and the tax owed
+      in that band.
+    </p>
+
+    <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: #18181b;">
+      Self-Employment Rates Separate From Employee Rates
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      In most countries, self-employed workers pay a higher social security contribution than
+      employees because they pay both the employee and employer portions. TaxFreely shows
+      the freelancer-specific rate rather than the employee rate, which is what most other
+      calculators use by default. This difference can be several thousand dollars or pounds
+      per year on a typical freelance income.
+    </p>
+
+    <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: #18181b;">
+      VAT and GST Registration Threshold Alerts
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      When your projected income approaches or exceeds the VAT or GST registration threshold
+      for your country, TaxFreely shows a real-time alert. Missing the registration deadline
+      is one of the most common and costly mistakes new freelancers make. The threshold is
+      different in every country and is updated whenever tax laws change.
+    </p>
+
+    <h3 style="font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: #18181b;">
+      Quarterly Estimated Tax With Exact Due Dates
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      In countries where freelancers pay tax quarterly — including the United States, the
+      United Kingdom, Canada, Australia, and many others — TaxFreely calculates the estimated
+      payment for each quarter and shows the exact due date. Push notifications remind you
+      seven days, three days, and one day before each deadline.
+    </p>
+
+    <!-- ── AI features ───────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      AI Tax Assistant
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Ask the AI Tax Assistant any question in plain language. It knows your selected country,
+      your income, and your industry. Ask about which expenses qualify as deductions, when your
+      next quarterly payment is due, whether you need to register for VAT, or anything else
+      about your tax situation. When both AI providers are busy, the assistant draws on
+      TaxFreely's own country data to give you accurate answers.
+    </p>
+
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Receipt Scanner
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Photograph any business expense receipt. The AI reads the amount, date, merchant name,
+      and currency, then adds it to the correct deduction field automatically. Works with
+      printed receipts, handwritten receipts, and receipts in any language.
+    </p>
+
+    <!-- ── Deductions ────────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Deductions That Reduce Your Taxable Income
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 0.75rem;">
+      TaxFreely includes nine deduction categories. For each one you enter, the calculator
+      shows the exact reduction in your tax bill:
+    </p>
+    <ul style="color: #52525b; padding-left: 1.5rem; max-width: 720px; margin-bottom: 1.5rem;">
+      <li>Home office — percentage of rent or mortgage</li>
+      <li>Equipment and hardware</li>
+      <li>Software and subscriptions</li>
+      <li>Health insurance premiums</li>
+      <li>Professional development and training</li>
+      <li>Travel and mileage</li>
+      <li>Phone and internet — percentage of bill</li>
+      <li>Pension and retirement contributions</li>
+      <li>Professional fees and accounting costs</li>
+    </ul>
+
+    <!-- ── Invoice calculator ────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Invoice Calculator With VAT
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Enter the net fee you want to earn from a project. TaxFreely calculates the exact
+      gross amount to invoice your client, including the correct VAT or GST for your country.
+      The breakdown shows your fee, the tax collected on behalf of the government, and the
+      total amount on the invoice.
+    </p>
+
+    <!-- ── Custom rates ──────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Custom Tax Rates
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Tax laws change. If the AI Tax News feature alerts you to a rate change before the app
+      has been updated, or if you need to model a different scenario, you can enter your own
+      bracket rates, personal allowance, or social security percentage. Custom rates are
+      shown with an amber indicator so you always know when you are not using official data.
+      One tap resets everything to the official rate.
+    </p>
+
+    <!-- ── Privacy ───────────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Complete Privacy — No Data Leaves Your Device
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Every calculation in TaxFreely runs locally on your device. Your income figures, your
+      country, your deductions — none of this is transmitted to any server. Saved profiles
+      and calculation history are stored in your browser's local storage. There are no accounts,
+      no analytics tracking your inputs, and no advertising based on your financial data.
+    </p>
+
+    <!-- ── Languages ─────────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.5rem; color: #09090b;">
+      Available in 40 Languages
+    </h2>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 0.75rem;">
+      TaxFreely is available in:
+    </p>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      English · Español · Français · العربية · हिन्दी · Português · 中文 (简体) · 中文 (繁體) ·
+      Русский · Bahasa Indonesia · Deutsch · 日本語 · 한국어 · Italiano · Nederlands · Türkçe ·
+      Tiếng Việt · ภาษาไทย · Polski · Українська · Română · Čeština · Magyar · Svenska ·
+      Norsk · Dansk · Suomi · Ελληνικά · עברית · বাংলা · اردو · Kiswahili · Hausa ·
+      Yorùbá · فارسی · Bahasa Melayu · Filipino · አማርኛ · Српски · Български
+    </p>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1.5rem;">
+      Right-to-left layout is applied automatically when Arabic, Hebrew, Persian, or Urdu
+      is selected. All numbers and dates are formatted according to local conventions using
+      the browser's Intl API.
+    </p>
+
+    <!-- ── FAQ ──────────────────────────────────────────────────────── -->
+    <h2 style="font-size: 1.375rem; font-weight: 600; margin: 2rem 0 0.75rem; color: #09090b;">
+      Frequently Asked Questions
+    </h2>
+
+    <h3 style="font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.3rem; color: #18181b;">
+      Is TaxFreely free to use?
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      Yes. All core tax calculations across all 195 countries are free. No account or
+      subscription is required. Optional Pro features are available as a one-time purchase.
+    </p>
+
+    <h3 style="font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.3rem; color: #18181b;">
+      Does TaxFreely work offline?
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      Yes. After the first load, TaxFreely works completely without internet. All tax data
+      and calculation logic is stored on your device. Ads will not display while offline,
+      but every calculation feature works without a connection.
+    </p>
+
+    <h3 style="font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.3rem; color: #18181b;">
+      Is TaxFreely only for freelancers?
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      No. TaxFreely calculates tax for freelancers, self-employed professionals, employees,
+      contractors, and business owners. You select your employment type at the top of the
+      calculator and the correct rates are applied automatically.
+    </p>
+
+    <h3 style="font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.3rem; color: #18181b;">
+      How accurate is the tax data?
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 1rem;">
+      TaxFreely uses official tax brackets and rates published by each country's tax
+      authority. The AI Tax News feature alerts you to recent changes. If rates have changed
+      since the last app update, you can enter custom rates manually. TaxFreely provides
+      estimates for financial planning — always confirm your final tax liability with a
+      qualified tax professional.
+    </p>
+
+    <h3 style="font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.3rem; color: #18181b;">
+      Is my financial data secure?
+    </h3>
+    <p style="color: #52525b; max-width: 720px; margin-bottom: 2rem;">
+      Yes. All calculations run locally on your device. Your income, deductions, and results
+      are never sent to any server. TaxFreely does not have accounts, so there is no database
+      of user financial data. The only data that optionally leaves your device is anonymous,
+      aggregated, and stripped of all personal details — and only if you choose to opt in
+      to help improve the country benchmarks feature.
+    </p>
+
+    <!-- Legal notice -->
+    <p style="font-size: 0.8125rem; color: #a1a1aa; max-width: 720px; border-top: 1px solid #e4e4e7; padding-top: 1.5rem;">
+      TaxFreely provides tax estimates for financial planning and informational purposes only.
+      Tax laws change frequently and individual circumstances vary. Always consult a qualified
+      tax professional before making financial or legal decisions. TaxFreely is not a tax
+      advisory service and does not constitute professional tax or legal advice.
+    </p>
+  </section>
+
+  <!-- ── No JavaScript fallback ─────────────────────────────────────────── -->
+  <noscript>
+    <div style="
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 2rem;
+      font-family: -apple-system, sans-serif;
+      text-align: center;
+      color: #52525b;
+    ">
+      <h2 style="color: #09090b; margin-bottom: 1rem;">JavaScript Required</h2>
+      <p>
+        TaxFreely requires JavaScript to run the tax calculation engine.
+        Please enable JavaScript in your browser settings and reload the page.
+        The app works fully offline once loaded for the first time.
+      </p>
+    </div>
+  </noscript>
+
+  <!-- ── Vite entry point ───────────────────────────────────────────────── -->
+  <!--
+    Vite replaces this with the hashed, minified bundle at build time.
+    During development (npm run dev) it serves the module directly.
+  -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
