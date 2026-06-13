@@ -20,9 +20,9 @@ const config: CapacitorConfig = {
     buildOptions: {
       // These values are injected by the GitHub Actions signing step
       // Do not hard-code keys here — they come from repository secrets
-      keystorePath:         undefined,
-      keystorePassword:     undefined,
-      keystoreAlias:        undefined,
+      keystorePath:          undefined,
+      keystorePassword:      undefined,
+      keystoreAlias:         undefined,
       keystoreAliasPassword: undefined,
       releaseType: 'AAB'
     }
@@ -31,7 +31,7 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       // Pure black matches OLED dark mode — no white flash on launch
-      backgroundColor:          '#000000',
+      backgroundColor:           '#000000',
       launchShowDuration:        2000,
       launchAutoHide:            true,
       showSpinner:               false,
@@ -61,7 +61,13 @@ const config: CapacitorConfig = {
       },
       // Set to true ONLY during development to avoid policy violations
       initializeForTesting: false
-    }
+    },
+
+    // Works without further config, but must be declared here so the
+    // Capacitor runtime registers the plugin correctly on Android.
+    // Used by IncomeModule.jsx (Calculate tab) and TaxResults.jsx for
+    // tactile feedback on calculate / result-reveal / tap-to-copy.
+    Haptics: {}
   }
 }
 
