@@ -56,7 +56,8 @@ export default defineConfig(({ mode }) => {
         '@hooks':       path.resolve(__dirname, './src/hooks'),
         '@contexts':    path.resolve(__dirname, './src/contexts'),
         '@i18n':        path.resolve(__dirname, './src/i18n'),
-        '@seo':         path.resolve(__dirname, './src/seo')
+        '@seo':         path.resolve(__dirname, './src/seo'),
+        '@config':      path.resolve(__dirname, './src/config')
       }
     },
 
@@ -68,12 +69,17 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            'react-vendor':    ['react', 'react-dom'],
-            'i18n-vendor':     ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
-            'pdf-vendor':      ['jspdf'],
-            'supabase-vendor': ['@supabase/supabase-js'],
-            'ai-vendor':       ['groq-sdk', '@google/generative-ai'],
-            'lucide-vendor':   ['lucide-react']
+            'react-vendor':     ['react', 'react-dom'],
+            'i18n-vendor':      ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+            'pdf-vendor':       ['jspdf'],
+            'supabase-vendor':  ['@supabase/supabase-js'],
+            'ai-vendor':        ['groq-sdk', '@google/generative-ai'],
+            'lucide-vendor':    ['lucide-react'],
+            // Tesseract is ~4-10MB depending on language pack.
+            // Isolating it here means it is NEVER part of the initial bundle —
+            // ReceiptScanner.jsx loads it via dynamic import() only when
+            // the user actually opens the receipt scanner.
+            'tesseract-vendor': ['tesseract.js']
           }
         }
       }
@@ -91,7 +97,10 @@ export default defineConfig(({ mode }) => {
         'i18next',
         'react-i18next',
         'i18next-browser-languagedetector'
-      ]
+      ],
+      // Tesseract must NOT be pre-bundled by Vite's dev optimizer —
+      // it needs to stay a separate dynamic chunk in production too
+      exclude: ['tesseract.js']
     }
   }
 })
