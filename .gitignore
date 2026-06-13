@@ -14,6 +14,13 @@ build
 android
 ios
 
+# ── Firebase config — injected via GitHub Secrets at build time ───────────
+# NEVER commit these even though the repo is private — best practice.
+# build-android.yml decodes the GOOGLE_SERVICES_JSON secret and writes
+# this file into android/app/ during the CI build only.
+google-services.json
+GoogleService-Info.plist
+
 # ── Environment files ─────────────────────────────────────────
 .env
 .env.local
