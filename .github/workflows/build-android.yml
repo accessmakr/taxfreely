@@ -1,0 +1,169 @@
+name: Build Android AAB
+
+# ── Trigger ──────────────────────────────────────────────────────────────
+# workflow_dispatch lets you run this manually from the Actions tab — useful
+# for testing the pipeline once all 159 files are committed.
+#
+# The push trigger below is deliberately commented out. While files are
+# still being added across the 58-message sequence, every intermediate
+# commit would attempt a build and fail on missing imports — burning
+# minutes and filling your inbox with failure emails. Once ALL files are
+# committed (after message 51), uncomment the two push: lines below and
+# commit that one change. From that point, every push to main builds and
+# uploads a new AAB automatically.
+on:
+  workflow_dispatch: {}
+  # push:
+  #   branches: [main]
+
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # npm ci requires a committed package-lock.json. Since every file in
+      # this repo is added one at a time through the GitHub web editor, no
+      # lockfile exists. npm install resolves dependencies without one.
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web assets for mobile
+        run: npm run build:mobile
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # android/ is gitignored and rebuilt from scratch on every run.
+      # cap add scaffolds the native project from capacitor.config.ts
+      # (appId, appName, webDir). cap sync copies dist-mobile/ into the
+      # project and wires up every Capacitor plugin in package.json,
+      # including @capacitor-firebase/* and @capacitor-community/admob.
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      # ── Firebase config injection ───────────────────────────────────
+      # GOOGLE_SERVICES_JSON holds the raw contents of the
+      # google-services.json file from your Firebase project
+      # (Project settings → your Android app → google-services.json).
+      # Paste the entire file content as the secret value — raw JSON,
+      # not base64. GOOGLE_SERVICES_EOF is the heredoc delimiter; the
+      # JSON itself will never contain a line matching it.
+      - name: Inject Firebase config
+        run: |
+          cat > android/app/google-services.json << 'GOOGLE_SERVICES_EOF'
+          ${{ secrets.GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICES_EOF
+
+      # ── Gradle patches for Firebase ─────────────────────────────────
+      # @capacitor-firebase/crashlytics needs the Google Services and
+      # Crashlytics Gradle plugins applied. Capacitor's generated android/
+      # project does not include these by default — they are added here
+      # on every run since android/ is never committed.
+      #
+      # 1. Root build.gradle: insert the two plugin classpaths right after
+      #    the Android Gradle Plugin classpath line that Capacitor's
+      #    template always includes.
+      # 2. App build.gradle: apply both plugins at the end of the file —
+      #    apply plugin statements are valid anywhere in a Gradle file.
+      - name: Configure Firebase Gradle plugins
+        run: |
+          sed -i "/classpath 'com.android.tools.build:gradle/a\\    classpath 'com.google.gms:google-services:4.4.2'\\n    classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.2'" android/build.gradle
+
+          echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
+          echo "apply plugin: 'com.google.firebase.crashlytics'" >> android/app/build.gradle
+
+      # ── Play Store SDK targeting ────────────────────────────────────
+      # Google Play rejects submissions that don't target a recent API
+      # level. Set explicitly rather than relying on whatever Capacitor's
+      # template defaults to at install time.
+      - name: Set target/compile SDK versions
+        run: |
+          sed -i "s/compileSdkVersion = .*/compileSdkVersion = 35/" android/variables.gradle
+          sed -i "s/targetSdkVersion = .*/targetSdkVersion = 35/" android/variables.gradle
+
+      # ── AdMob App ID ──────────────────────────────────────────────────
+      # @capacitor-community/admob requires this meta-data tag in the
+      # manifest before AdMob.initialize() can run safely. The placeholder
+      # here matches capacitor.config.ts — when you have a real AdMob App
+      # ID, update BOTH locations together.
+      - name: Inject AdMob App ID into manifest
+        run: |
+          sed -i 's|</application>|    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-REPLACE_WITH_YOUR_ADMOB_APP_ID~XXXXXXXXXX"/>\n    </application>|' android/app/src/main/AndroidManifest.xml
+
+      # ── Gradle cache ─────────────────────────────────────────────────
+      # Android builds are slow (4-8 min cold). Caching ~/.gradle cuts
+      # repeat builds significantly. Keyed on package.json since android/
+      # doesn't exist yet when the cache is restored on a fresh runner.
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('package.json') }}
+          restore-keys: |
+            gradle-
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Build release AAB
+        run: cd android && ./gradlew bundleRelease --no-daemon
+
+      # ── Sign the AAB ─────────────────────────────────────────────────
+      # SIGNING_KEY is the base64-encoded keystore produced by the
+      # "Generate Android Keystore" workflow. KEY_ALIAS, KEY_STORE_PASSWORD,
+      # and KEY_PASSWORD must match what you entered when generating it.
+      - name: Sign AAB
+        id: sign
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      # ── Upload to Play Store (internal track) ───────────────────────
+      # SERVICE_ACCOUNT_JSON is the JSON key from Play Console → Setup →
+      # API access → service account, with Release Manager permission on
+      # this app. The FIRST EVER AAB for a new package name must be
+      # uploaded manually through the Play Console UI — Google does not
+      # allow the API to create the very first release. Every release
+      # after that can use this step.
+      - name: Upload to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.taxfreely.app
+          releaseFiles: ${{ steps.sign.outputs.signedReleaseFile }}
+          track: internal
+          status: completed
+
+      # ── Artifact fallback ────────────────────────────────────────────
+      # Always upload the signed AAB as a workflow artifact too — a copy
+      # exists even before Play Store secrets are configured, or if that
+      # step fails for any reason.
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: taxfreely-release-aab
+          path: ${{ steps.sign.outputs.signedReleaseFile }}
+          retention-days: 14
